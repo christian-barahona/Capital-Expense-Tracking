@@ -1,0 +1,19 @@
+body {
+background: #EBEDEC;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #f2d473;
+}
+
+.click-row {
+    cursor: pointer;
+}
+
+#save-button, #cancel-button {
+    display: none;
+}
+
+.form-control {
+    display: none;
+}
