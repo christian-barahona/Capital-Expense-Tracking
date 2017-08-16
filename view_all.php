@@ -16,19 +16,7 @@ catch(PDOException $e)
     }
 ?>
 <div class="container-fluid">
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <a class="nav-link active" href="?">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="?p=new_entry">New Entry</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Export to Excel</a>
-        </li>
-    </ul>
     <div class="row">
-
         <table class="table table-striped table-hover" id="view-all">
             <thead>
                 <tr>
@@ -55,7 +43,7 @@ catch(PDOException $e)
             foreach( $result as $row ) {
                 $row_counter++;
                 echo <<<EOT
-                    <tr class="click-row" id="db-row-$row[id]"> 
+                    <tr class="click-row" id="$row[id]"> 
                         <th scope='row'>$row_counter</th>
                         <td>$row[project]</td>
                         <td>$row[status]</td>

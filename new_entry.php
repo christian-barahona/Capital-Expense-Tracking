@@ -1,4 +1,5 @@
 <?php
+$notice = "";
 if(isset(
         $_POST['project'],
         $_POST['status'],
@@ -45,88 +46,122 @@ if(isset(
     }
 }
 else {
-    echo "Complete all fields";
+    $notice = "<div class='text-center hidden-print'><strong>All fields are required</strong></div>";
 }
 ?>
-
 <div class="container-fluid">
-    <form method="POST" id="new-entry" action="">
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Project</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="project" autofocus>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Status</label>
-            <div class="col-3">
+<?php
+echo <<<EOT
+<div class="text-center">
+    <button type="button" class="btn btn-outline-success hidden-print" data-toggle="modal" data-target="#confirmation-modal">Save</button>
+    <button type="button" class="btn btn-outline-danger hidden-print" id="go-back-button">Cancel</button>
+    <p>$notice</p>
+</div>
+<form method="POST" action="" id="edit-values">
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <th scope="row">Project</th>
+            <td>
+                <input class="form-control" type="text" value="" name="project" id="project" autofocus>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Status</th>
+            <td>
                 <select class="form-control" name="status">
-                    <option selected>Approved</option>
+                    <option selected></option>
+                    <option>Approved</option>
                     <option>Planned</option>
+                    <option>Closed</option>
                 </select>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Vendor</th>
+            <td>
+                <input class="form-control" type="text" value="" name="vendor">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Project Manager</th>
+            <td>
+                <input class="form-control" type="text" value="" name="project_manager">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">APR</th>
+            <td>
+                <input class="form-control" type="text" value="" name="apr">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">IP Code</th>
+            <td>
+                <input class="form-control" type="text" value="" name="ip_code">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Capex Total Amount</th>
+            <td>
+                <input class="form-control" type="text" value="" name="capex_total_amount">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">PO</th>
+            <td>
+                <input class="form-control" type="text" value="" name="po">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">PO Amount</th>
+            <td>
+                <input class="form-control" type="text" value="" name="po_amount">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Invoice Number</th>
+            <td>
+                <input class="form-control" type="text" value="" name="invoice_number">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Invoice Date</th>
+            <td>
+                <input class="form-control" type="date" value="" name="invoice_date">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Invoice Amount</th>
+            <td>
+                <input class="form-control" type="text" value="" name="invoice_amount">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmation-modal-label">Are you sure you want to save changes?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Changes cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-outline-success" form="edit-values" id="confirmation-save-button">Save changes</button>
             </div>
         </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Vendor</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="vendor">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Project Manager</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="project_manager">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">APR</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="apr">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">IP Code</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="ip_code">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Capex Total Amount</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="capex_total_amount">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">PO</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="po">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">PO Amount</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="po_amount">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Invoice Number</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="invoice_number">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Invoice Date</label>
-            <div class="col-3">
-                <input class="form-control" type="date" name="invoice_date">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-1 col-form-label">Invoice Amount</label>
-            <div class="col-3">
-                <input class="form-control" type="text" name="invoice_amount">
-            </div>
-        </div>
-    </form>
-    <button type="submit" class="btn btn-success" form="new-entry">Save</button>
-    <button type="button" class="btn btn-danger" id="cancel-button">Cancel</button>
+    </div>
+</div>
+EOT;
+?>
 </div>

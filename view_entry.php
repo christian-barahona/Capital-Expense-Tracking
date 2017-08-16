@@ -1,7 +1,7 @@
 <?php
 if(isset($_GET["row"]))
 {
-    $edit_row = $_GET["row"];
+    $row_id = $_GET["row"];
 }
 
 if(isset(
@@ -33,7 +33,6 @@ if(isset(
     $invoice_date = $_POST['invoice_date'];
     $invoice_amount = $_POST['invoice_amount'];
 
-    $row_row = $_POST['row_id'];
     try {
 
         $conn = new PDO("mysql:host=$server;dbname=$database", $user, $password);
@@ -52,7 +51,7 @@ if(isset(
             invoice_date='$invoice_date',
             invoice_amount='$invoice_amount'
             
-            WHERE id='$row_row'");
+            WHERE id='$row_id'");
         $stmt->execute();
 
         header('Location: ?p=view_all');
@@ -68,7 +67,7 @@ try {
 
     $conn = new PDO("mysql:host=$server;dbname=$database", $user, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $conn->prepare("SELECT * FROM capex_tracking WHERE id='$edit_row' ");
+    $stmt = $conn->prepare("SELECT * FROM capex_tracking WHERE id='$row_id' ");
     $stmt->execute();
 
     $result = $stmt-> fetchAll(PDO::FETCH_BOTH);
@@ -84,122 +83,132 @@ catch(PDOException $e)
 <?php
 foreach( $result as $row ) {
     echo <<<EOT
-        <form method="POST" action="" id="edit-values">        
-            <input type="hidden" name="row_id" value="$row[id]">
-            <div class="form-group row">
-                <label class="col-1 col-form-label" for="project"><strong>Project</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[project]" name="project" id="project" autofocus>
-                    <div id="initial-text">$row[project]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Status</strong></label>
-                <div class="col-3">
-                    <select class="form-control" name="status">
-                      <option selected>Approved</option>
-                      <option>Planned</option>
-                    </select>
-                    <div id="initial-text">$row[status]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Vendor</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[vendor]" name="vendor">
-                    <div id="initial-text">$row[vendor]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Project Manager</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[project_manager]" name="project_manager">
-                    <div id="initial-text">$row[project_manager]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>APR</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[apr]" name="apr">
-                    <div id="initial-text">$row[apr]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>IP Code</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[ip_code]" name="ip_code">
-                    <div id="initial-text">$row[ip_code]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Capex Total Amount</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[capex_total_amount]" name="capex_total_amount">
-                    <div id="initial-text">$row[capex_total_amount]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>PO</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[po]" name="po">
-                    <div id="initial-text">$row[po]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>PO Amount</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[po_amount]" name="po_amount">
-                    <div id="initial-text">$row[po_amount]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Invoice Number</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[invoice_number]" name="invoice_number">
-                    <div id="initial-text">$row[invoice_number]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Invoice Date</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="date" value="$row[invoice_date]" name="invoice_date">
-                    <div id="initial-text">$row[invoice_date]</div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-1 col-form-label"><strong>Invoice Amount</strong></label>
-                <div class="col-3">
-                    <input class="form-control" type="text" value="$row[invoice_amount]" name="invoice_amount">
-                    <div id="initial-text">$row[invoice_amount]</div>
-                </div>
-            </div>
-        </form>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmation-modal" id="save-button">Save</button>
-        <button type="button" class="btn btn-primary" id="edit-button">Edit</button>
-        <button type="button" class="btn btn-danger" id="go-back-button">Back to view all</button>
-        <button type="button" class="btn btn-danger" id="cancel-button">Cancel</button>
-        
-        <!-- Modal -->
-        <div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="confirmation-modal-label">Are you sure you want to save changes?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Changes cannot be undone.
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-success" form="edit-values" id="confirmation-save-button">Save changes</button>
-              </div>
-            </div>
+<!-- Button trigger modal -->
+<div class="text-center" id="top-buttons">
+    <button type="button" class="btn btn-outline-primary hidden-print" id="print-button">Print</button>
+    <button type="button" class="btn btn-outline-success hidden-print" data-toggle="modal" data-target="#confirmation-modal" id="save-button">Save</button>
+    <button type="button" class="btn btn-outline-primary hidden-print" id="edit-button">Edit</button>
+    <button type="button" class="btn btn-outline-danger hidden-print" id="go-back-button">Go Back</button>
+    <button type="button" class="btn btn-outline-danger hidden-print" id="cancel-button">Cancel</button>
+</div>
+<div class="formss">
+    <form method="POST" action="" id="edit-values">
+        <table class="table table-striped display">
+            <tbody>
+                <tr>
+                    <th scope="row">Project</th>
+                    <td>
+                        <div class="initial-text">$row[project]</div>
+                        <input class="form-control view-input" type="text" value="$row[project]" name="project" id="project" autofocus>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>
+                        <div class="initial-text">$row[status]</div>
+                        <select class="form-control view-input" name="status">
+                            <option selected>Approved</option>
+                            <option>Planned</option>
+                            <option>Closed</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Vendor</th>
+                    <td>
+                        <div class="initial-text">$row[vendor]</div>
+                        <input class="form-control view-input" type="text" value="$row[vendor]" name="vendor">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Project Manager</th>
+                    <td>
+                        <div class="initial-text">$row[project_manager]</div>
+                        <input class="form-control view-input" type="text" value="$row[project_manager]" name="project_manager">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">APR</th>
+                    <td>
+                        <div class="initial-text">$row[apr]</div>
+                        <input class="form-control view-input" type="text" value="$row[apr]" name="apr">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">IP Code</th>
+                    <td>
+                        <div class="initial-text">$row[ip_code]</div>
+                        <input class="form-control view-input" type="text" value="$row[ip_code]" name="ip_code">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Capex Total Amount</th>
+                    <td>
+                        <div class="initial-text">$row[capex_total_amount]</div>
+                        <input class="form-control view-input" type="text" value="$row[capex_total_amount]" name="capex_total_amount">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">PO</th>
+                    <td>
+                        <div class="initial-text">$row[po]</div>
+                        <input class="form-control view-input" type="text" value="$row[po]" name="po">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">PO Amount</th>
+                    <td>
+                        <div class="initial-text">$row[po_amount]</div>
+                        <input class="form-control view-input" type="text" value="$row[po_amount]" name="po_amount">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Invoice Number</th>
+                    <td>
+                        <div class="initial-text">$row[invoice_number]</div>
+                        <input class="form-control view-input" type="text" value="$row[invoice_number]" name="invoice_number">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Invoice Date</th>
+                    <td>
+                        <div class="initial-text">$row[invoice_date]</div>
+                        <input class="form-control view-input" type="date" value="$row[invoice_date]" name="invoice_date">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Invoice Amount</th>
+                    <td>
+                        <div class="initial-text">$row[invoice_amount]</div>
+                        <input class="form-control view-input" type="text" value="$row[invoice_amount]" name="invoice_amount">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+            
+    <!-- Modal -->
+    <div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmation-modal-label">Are you sure you want to save changes?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Changes cannot be undone.</p>
+            <div id="changes-made"></div> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id="confirmation-cancel-button">Cancel</button>
+            <button type="submit" class="btn btn-outline-success" form="edit-values" id="confirmation-save-button">Save changes</button>
           </div>
         </div>
+      </div>
+    </div>
+</div>
 EOT;
 }
 ?>
